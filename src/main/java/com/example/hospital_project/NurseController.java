@@ -17,7 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/nurse") 
 public class NurseController {
-
+	@GetMapping("/index") 
+	public ResponseEntity<List<Nurse>> getAll() throws IOException{
+        	DaoJson dao = new DaoJson();
+			List<Nurse> nurses = dao.readFile();
+			return ResponseEntity.ok(nurses);
+			// return ResponseEntity.status(HttpStatus.OK).body(nurses); 
+	}
     @PostMapping("/login") 
     public ResponseEntity<Boolean> login(
     		@RequestBody Nurse nurse
@@ -38,6 +44,7 @@ public class NurseController {
         if (loggedin) {
             return ResponseEntity.ok(true);
         } else {
+        	
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false); 
         }
     }
