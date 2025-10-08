@@ -15,51 +15,47 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/nurse") 
+@RequestMapping("/nurse")
 public class NurseController {
 
-    @PostMapping("/login") 
-    public ResponseEntity<Boolean> login(
-    		@RequestBody Nurse nurse
-    		) throws IllegalArgumentException, IOException {
+	@PostMapping("/login")
+	public ResponseEntity<Boolean> login(@RequestBody Nurse nurse) throws IllegalArgumentException, IOException {
 
-        DaoJson dao = new DaoJson();
-        ArrayList<Nurse> nurses = dao.readFile();
+		DaoJson dao = new DaoJson();
+		ArrayList<Nurse> nurses = dao.readFile();
 
-        boolean loggedin = false;
+		boolean loggedin = false;
 
-        for (Nurse nurse2 : nurses) {
-            if (nurse2.getUser().equals(nurse.getUser()) && nurse2.getPw().equals(nurse.getPw())) {
-                loggedin = true;
-                break; 
-            }
-        }
+		for (Nurse nurse2 : nurses) {
+			if (nurse2.getUser().equals(nurse.getUser()) && nurse2.getPw().equals(nurse.getPw())) {
+				loggedin = true;
+				break;
+			}
+		}
 
-        if (loggedin) {
-            return ResponseEntity.ok(true);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false); 
-        }
-    }
+		if (loggedin) {
+			return ResponseEntity.ok(true);
+		} else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+		}
+	}
 
-    @GetMapping("/name/{name}")
-        public ResponseEntity<List<Nurse>> getByName(@PathVariable String name) throws IOException {
-            DaoJson dao = new DaoJson();
-            ArrayList<Nurse> nurses = dao.readFile();
+	@GetMapping("/name/{user}")
+	public ResponseEntity<Nurse> getByName(@PathVariable String user) throws IOException {
+		DaoJson dao = new DaoJson();
+		ArrayList<Nurse> nurses = dao.readFile();
 
-            List<Nurse> nurseFound = new ArrayList<>();
-            for (Nurse nurse : nurses) {
-                if (nurse.getName().toLowerCase().contains(name.toLowerCase())) {
-                    nurseFound.add(nurse);
-                }
-            }
+		List<Nurse> nurseFound = new ArrayList<>();
+		for (Nurse nurse : nurses) {
+			if (nurse.getUser().toLowerCase().contains(user.toLowerCase())) {
+				Nurse nurse1 = new Nurse(nurse.getName(), nurse.getLastname(), nurse.getUser(), nurse.getPw());
+				nurseFound.add(nurse1);
+				return ResponseEntity.ok(nurse1);
+			}
+		}
 
-            if (nurseFound.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ArrayList<>());
-            }
+		return ResponseEntity.notFound().build();
 
-            return ResponseEntity.ok(nurseFound);
-        }
+	}
 
-    
 }
