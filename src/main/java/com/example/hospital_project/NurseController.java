@@ -7,6 +7,9 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,19 +24,18 @@ public class NurseController {
 			return ResponseEntity.ok(nurses);
 			// return ResponseEntity.status(HttpStatus.OK).body(nurses); 
 	}
-    @GetMapping("/login") 
+    @PostMapping("/login") 
     public ResponseEntity<Boolean> login(
-            @RequestParam(value = "user", defaultValue = "") String name,
-            @RequestParam(value = "pw", defaultValue = "") String pw
-    ) throws IllegalArgumentException, IOException {
+    		@RequestBody Nurse nurse
+    		) throws IllegalArgumentException, IOException {
 
         DaoJson dao = new DaoJson();
         ArrayList<Nurse> nurses = dao.readFile();
 
         boolean loggedin = false;
 
-        for (Nurse nurse : nurses) {
-            if (nurse.getUser().equals(name) && nurse.getPw().equals(pw)) {
+        for (Nurse nurse2 : nurses) {
+            if (nurse2.getUser().equals(nurse.getUser()) && nurse2.getPw().equals(nurse.getPw())) {
                 loggedin = true;
                 break; 
             }
@@ -46,4 +48,25 @@ public class NurseController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false); 
         }
     }
+
+    @GetMapping("/name/{name}")
+        public ResponseEntity<List<Nurse>> getByName(@PathVariable String name) throws IOException {
+            DaoJson dao = new DaoJson();
+            ArrayList<Nurse> nurses = dao.readFile();
+
+            List<Nurse> nurseFound = new ArrayList<>();
+            for (Nurse nurse : nurses) {
+                if (nurse.getName().toLowerCase().contains(name.toLowerCase())) {
+                    nurseFound.add(nurse);
+                }
+            }
+
+            if (nurseFound.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ArrayList<>());
+            }
+
+            return ResponseEntity.ok(nurseFound);
+        }
+
+    
 }
