@@ -47,7 +47,7 @@ public class NurseController {
 
 		List<Nurse> nurseFound = new ArrayList<>();
 		for (Nurse nurse : nurses) {
-			if (nurse.getUser().toLowerCase().contains(user.toLowerCase())) {
+			if (nurse.getName().toLowerCase().contains(user.toLowerCase())) {
 				Nurse nurse1 = new Nurse(nurse.getName(), nurse.getLastname(), nurse.getUser(), nurse.getPw());
 				nurseFound.add(nurse1);
 				return ResponseEntity.ok(nurse1);
