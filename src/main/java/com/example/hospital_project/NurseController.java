@@ -14,9 +14,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.hospital_project.NurseRepository;
+
 @RestController
 @RequestMapping("/nurse")
 public class NurseController {
+	
+	
+	private final NurseRepository nurseRepository;
+    
+    public NurseController(NurseRepository nurseRepository) {
+        this.nurseRepository = nurseRepository;
+    }
+	
+	
 	@GetMapping("/index") 
 	public ResponseEntity<List<Nurse>> getAll() throws IOException{
         	DaoJson dao = new DaoJson();
