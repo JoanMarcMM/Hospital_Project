@@ -24,6 +24,7 @@ public class NurseController {
 	private final NurseRepository nurseRepository;
     
     public NurseController(NurseRepository nurseRepository) {
+    	
         this.nurseRepository = nurseRepository;
     }
 	
@@ -35,13 +36,17 @@ public class NurseController {
 			return ResponseEntity.ok(nurses);
 			// return ResponseEntity.status(HttpStatus.OK).body(nurses); 
 	}
+	
+	
+	
+	
     @PostMapping("/login") 
     public ResponseEntity<Boolean> login(
     		@RequestBody Nurse nurse
     		) throws IllegalArgumentException, IOException {
 
-		DaoJson dao = new DaoJson();
-		ArrayList<Nurse> nurses = dao.readFile();
+		List<Nurse> list = nurseRepository.findAll();
+		ArrayList<Nurse> nurses = new ArrayList<Nurse>(list);
 
 		boolean loggedin = false;
 
@@ -59,6 +64,11 @@ public class NurseController {
 		}
 	}
 
+    
+    
+    
+    
+    
 	@GetMapping("/name/{name}")
 	public ResponseEntity<Nurse> getByName(@PathVariable String name) throws IOException {
 		DaoJson dao = new DaoJson();
