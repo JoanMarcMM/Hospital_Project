@@ -18,22 +18,32 @@ import com.example.hospital_project.NurseRepository;
 
 @RestController
 @RequestMapping("/nurse")
+
+
 public class NurseController {
+	
 	@Autowired
     private NurseRepository nurseRepository;
+	
+	
+	
+	
 	@GetMapping("/index") 
 	public ResponseEntity<List<Nurse>> getAll() throws IOException{
 		List<Nurse> nurses = nurseRepository.findAll();
         return ResponseEntity.ok(nurses);
 			// return ResponseEntity.status(HttpStatus.OK).body(nurses); 
 	}
+	
+	
+	
     @PostMapping("/login") 
     public ResponseEntity<Boolean> login(
     		@RequestBody Nurse nurse
     		) throws IllegalArgumentException, IOException {
 
-		DaoJson dao = new DaoJson();
-		ArrayList<Nurse> nurses = dao.readFile();
+		List<Nurse> list = nurseRepository.findAll();
+		ArrayList<Nurse> nurses = new ArrayList<Nurse>(list);
 
 		boolean loggedin = false;
 
@@ -51,6 +61,9 @@ public class NurseController {
 		}
 	}
 
+    
+    
+    
     
     @GetMapping("/name/{name}")
     public ResponseEntity<List<Nurse>> findByName(@PathVariable String name) {
