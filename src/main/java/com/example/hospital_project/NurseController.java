@@ -63,26 +63,15 @@ public class NurseController {
 	}
 
     
-    
-    
-    
-    
-	@GetMapping("/name/{name}")
-	public ResponseEntity<Nurse> getByName(@PathVariable String name) throws IOException {
-		DaoJson dao = new DaoJson();
-		ArrayList<Nurse> nurses = dao.readFile();
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<Nurse>> findByName(@PathVariable String name) {
+        List<Nurse> nurses = nurseRepository.findByNameContainingIgnoreCase(name);
 
-		List<Nurse> nurseFound = new ArrayList<>();
-		for (Nurse nurse : nurses) {
-			if (nurse.getName().toLowerCase().contains(name.toLowerCase())) {
-				Nurse nurse1 = new Nurse(nurse.getName(), nurse.getLastname(), nurse.getUser(), nurse.getPw());
-				nurseFound.add(nurse1);
-				return ResponseEntity.ok(nurse1);
-			}
-		}
-
-		return ResponseEntity.notFound().build();
-		
-	}
+        if (nurses.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(nurses);
+        }
+    }
 
 }
