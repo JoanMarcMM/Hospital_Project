@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,15 +19,8 @@ import com.example.hospital_project.NurseRepository;
 @RestController
 @RequestMapping("/nurse")
 public class NurseController {
-	
-	
-	private final NurseRepository nurseRepository;
-    
-    public NurseController(NurseRepository nurseRepository) {
-        this.nurseRepository = nurseRepository;
-    }
-	
-	
+	@Autowired
+    private NurseRepository nurseRepository;
 	@GetMapping("/index") 
 	public ResponseEntity<List<Nurse>> getAll() throws IOException{
 		List<Nurse> nurses = nurseRepository.findAll();
