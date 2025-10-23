@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.hospital_project.NurseRepository;
 
 @RestController
@@ -30,9 +29,8 @@ public class NurseController {
 	
 	@GetMapping("/index") 
 	public ResponseEntity<List<Nurse>> getAll() throws IOException{
-        	DaoJson dao = new DaoJson();
-			List<Nurse> nurses = dao.readFile();
-			return ResponseEntity.ok(nurses);
+		List<Nurse> nurses = nurseRepository.findAll();
+        return ResponseEntity.ok(nurses);
 			// return ResponseEntity.status(HttpStatus.OK).body(nurses); 
 	}
     @PostMapping("/login") 
