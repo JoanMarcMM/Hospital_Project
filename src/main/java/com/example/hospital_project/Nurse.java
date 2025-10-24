@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 public class Nurse {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
 	String name;
 	String lastname;
 	String user;
