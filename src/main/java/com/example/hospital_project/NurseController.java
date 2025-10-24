@@ -66,7 +66,7 @@ public class NurseController {
     
     
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<Nurse>> findByName(@PathVariable String name) {
+    public ResponseEntity<List<Nurse>> findByName(@PathVariable("name") String name) {
         List<Nurse> nurses = nurseRepository.findByNameContainingIgnoreCase(name);
 
         if (nurses.isEmpty()) {
