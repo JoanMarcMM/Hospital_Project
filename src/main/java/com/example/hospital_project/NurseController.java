@@ -3,6 +3,7 @@ package com.example.hospital_project;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,14 +26,21 @@ public class NurseController {
 	@Autowired
     private NurseRepository nurseRepository;
 	
-	
+	@GetMapping("/id/{id}")
+	public ResponseEntity<Optional<Nurse>> getNurse (@PathVariable("id") Long idNurse) throws IOException{
+		Optional<Nurse> nurse = nurseRepository.findById(idNurse);
+		if (nurse.isPresent()) {
+	        return ResponseEntity.ok(nurse);
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
+	}
 	
 	
 	@GetMapping("/index") 
 	public ResponseEntity<List<Nurse>> getAll() throws IOException{
 		List<Nurse> nurses = nurseRepository.findAll();
         return ResponseEntity.ok(nurses);
-			// return ResponseEntity.status(HttpStatus.OK).body(nurses); 
 	}
 	
 	
