@@ -62,7 +62,9 @@ public class Nurse {
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
-	
+	public long getId() {
+		return id;
+	}
 	
 	
 	
