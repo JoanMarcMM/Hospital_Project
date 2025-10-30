@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,56 @@ public class NurseController {
 	@Autowired
     private NurseRepository nurseRepository;
 	
+	@PostMapping("/new")
+	public ResponseEntity<?> createNurse(@RequestBody Nurse nurse) {
+	    try {
+	        String validationError = validateNurse(nurse);
+	        if (validationError != null) {
+	            return ResponseEntity.badRequest().body(validationError);
+	        }
+
+	        Nurse savedNurse = nurseRepository.save(nurse);
+	        return ResponseEntity.status(HttpStatus.CREATED).body(savedNurse);
+
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("Error al crear el enfermero: " + e.getMessage());
+	    }
+	}
+
+	
+	private String validateNurse(Nurse nurse) {
+	    if (nurse == null) {
+	        return "El objeto enfermero no puede ser nulo.";
+	    }
+
+	    if (isNullOrEmpty(nurse.getName()) ||
+	        isNullOrEmpty(nurse.getLastname()) ||
+	        isNullOrEmpty(nurse.getUser()) ||
+	        isNullOrEmpty(nurse.getPw())) {
+	        return "Faltan campos obligatorios.";
+	    }
+
+	    if (!isValidPassword(nurse.getPw())) {
+	        return "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número.";
+	    }
+
+	    return null; 
+	}
+
+	private boolean isNullOrEmpty(String value) {
+	    return value == null || value.trim().isEmpty();
+	}
+
+	private boolean isValidPassword(String password) {
+	    String regex = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
+	    return password.matches(regex);
+	}
+
+	
+	
+	
+
 	@GetMapping("/id/{id}")
 	public ResponseEntity<Optional<Nurse>> getNurse (@PathVariable("id") Long idNurse) throws IOException{
 		Optional<Nurse> nurse = nurseRepository.findById(idNurse);
@@ -36,6 +87,7 @@ public class NurseController {
 	        return ResponseEntity.notFound().build();
 	    }
 	}
+
 	
 	
 	@GetMapping("/index") 
