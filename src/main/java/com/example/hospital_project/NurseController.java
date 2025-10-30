@@ -3,6 +3,7 @@ package com.example.hospital_project;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -75,13 +77,23 @@ public class NurseController {
 	
 	
 	
+
+	@GetMapping("/id/{id}")
+	public ResponseEntity<Optional<Nurse>> getNurse (@PathVariable("id") Long idNurse) throws IOException{
+		Optional<Nurse> nurse = nurseRepository.findById(idNurse);
+		if (nurse.isPresent()) {
+	        return ResponseEntity.ok(nurse);
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
+	}
+
 	
 	
 	@GetMapping("/index") 
 	public ResponseEntity<List<Nurse>> getAll() throws IOException{
 		List<Nurse> nurses = nurseRepository.findAll();
         return ResponseEntity.ok(nurses);
-			// return ResponseEntity.status(HttpStatus.OK).body(nurses); 
 	}
 	
 	
@@ -110,7 +122,80 @@ public class NurseController {
 		}
 	}
 
-    
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(
+    		@PathVariable(value = "id", required = true) Long id,
+            @RequestBody Nurse nurseBody
+    ) {
+
+        Optional<Nurse> optionalNurse = nurseRepository.findById(id);
+
+        if (optionalNurse.isEmpty()) {
+            return ResponseEntity.notFound().build(); 
+        }
+
+        Nurse nurseDB = optionalNurse.get();
+
+        List<String> errors = new ArrayList<>();
+
+        // ====== NAME ======
+        if (nurseBody.getName() != null) {              
+            String name = nurseBody.getName().trim();
+            if (!name.isEmpty()) {                     
+                if (!name.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {
+                    errors.add("name no puede contener números ni caracteres raros");
+                } else {
+                    nurseDB.setName(name);
+                }
+            }
+        }
+
+        // ====== LASTNAME ======
+        if (nurseBody.getLastname() != null) {
+            String lastname = nurseBody.getLastname().trim();
+            if (!lastname.isEmpty()) {
+                if (!lastname.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {
+                    errors.add("lastname no puede contener números ni caracteres raros");
+                } else {
+                    nurseDB.setLastname(lastname);
+                }
+            }
+        }
+
+        // ====== USER ======
+        if (nurseBody.getUser() != null) {
+            String user = nurseBody.getUser().trim();
+            if (!user.isEmpty()) {
+                if (!user.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ._-]+$")) {
+                    errors.add("user no puede contener números ni caracteres raros");
+                }
+                else {
+                    nurseDB.setUser(user);
+                }
+            }
+        }
+
+        // ====== PW ======
+        if (nurseBody.getPw() != null) {
+            String pw = nurseBody.getPw().trim();
+            if (!pw.isEmpty()) {
+                nurseDB.setPw(pw);
+            }
+        }
+
+
+        if (!errors.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(errors);
+        }
+
+        Nurse nurseUpdated = nurseRepository.save(nurseDB);
+
+        return ResponseEntity.ok(nurseUpdated);
+    }
+
+
     
     
     
@@ -124,5 +209,6 @@ public class NurseController {
             return ResponseEntity.ok(nurses);
         }
     }
-
+    
+   
 }
