@@ -10,22 +10,19 @@ import java.util.List;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class DaoJson  {
-	
-	public ArrayList<Nurse> readFile() throws IllegalArgumentException, IOException {
-		
-		InputStream filePath = getClass().getResourceAsStream("/nurse_list.json");
-	
-		ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(filePath);
-        JsonNode nurseArray = root.get("nurse_list");
-        List<Nurse> nursesList = Arrays.asList(mapper.treeToValue(nurseArray, Nurse[].class));
+public class DaoJson {
 
-        return new ArrayList<>(nursesList);
-	     
-		
-		
-		
+	public ArrayList<Nurse> readFile() throws IllegalArgumentException, IOException {
+
+		InputStream filePath = getClass().getResourceAsStream("/nurse_list.json");
+
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(filePath);
+		JsonNode nurseArray = root.get("nurse_list");
+		List<Nurse> nursesList = Arrays.asList(mapper.treeToValue(nurseArray, Nurse[].class));
+
+		return new ArrayList<>(nursesList);
+
 	}
 
 }
