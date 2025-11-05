@@ -121,7 +121,7 @@ public class NurseController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable(value = "id", required = true) Long id,
+	public ResponseEntity<?> updateNurse(@PathVariable(value = "id", required = true) Long id,
 			@RequestBody Nurse nurseBody) {
 
 		Optional<Nurse> optionalNurse = nurseRepository.findById(id);
