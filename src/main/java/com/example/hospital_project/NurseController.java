@@ -29,7 +29,7 @@ public class NurseController {
 	private NurseRepository nurseRepository;
 
 	@PostMapping("/new")
-	public ResponseEntity<?> createNurse(@RequestBody Nurse nurse) {
+	public ResponseEntit<?> createNurse(@RequestBody Nurse nurse) {
 		try {
 			String validationError = validateNurse(nurse);
 			if (validationError != null) {
@@ -56,7 +56,7 @@ public class NurseController {
 		}
 
 		if (!isValidPassword(nurse.getPw())) {
-			return "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un números.";
+			return "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número.";
 		}
 
 		return null;
