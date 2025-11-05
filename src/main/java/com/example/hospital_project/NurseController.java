@@ -56,7 +56,7 @@ public class NurseController {
 		}
 
 		if (!isValidPassword(nurse.getPw())) {
-			return "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número.";
+			return "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un números.";
 		}
 
 		return null;
