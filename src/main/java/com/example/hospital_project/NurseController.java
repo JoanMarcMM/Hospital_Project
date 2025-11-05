@@ -29,7 +29,7 @@ public class NurseController {
 	private NurseRepository nurseRepository;
 
 	@PostMapping("/new")
-	public ResponseEntit<?> createNurse(@RequestBody Nurse nurse) {
+	public ResponseEntity<?> createNurse(@RequestBody Nurse nurse) {
 		try {
 			String validationError = validateNurse(nurse);
 			if (validationError != null) {
