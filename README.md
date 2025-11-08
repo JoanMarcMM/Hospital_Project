@@ -96,7 +96,7 @@ This REST API provides several endpoints for managing nurse data. You can intera
 
 This project was developed and maintained by the following team:
 
-* **Marvin Esteban** - [@MarvinGitHubUser](https://github.com/MarvinEsteban)
+* **Marvin Esteban** - [@MarvinEsteban](https://github.com/MarvinEsteban)
 * **Joan Marc Martinez** - [@JoanMarcMM](https://github.com/JoanMarcMM)
-* **Mario Perez** - [@MarioGitHubUser](https://github.com/mario-perez30)
-* **Rodrigo Calderón** - [@RodrigoGitHubUser](https://github.com/Rorro101004)
+* **Mario Perez** - [@MarioPerez](https://github.com/mario-perez30)
+* **Rodrigo Calderón** - [@Rorro101004](https://github.com/Rorro101004)
