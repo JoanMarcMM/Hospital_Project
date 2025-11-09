@@ -31,7 +31,7 @@ public class NurseController {
 	@PostMapping("/new")
 	public ResponseEntity<?> createNurse(@RequestBody Nurse nurse) {
 		try {
-			String validationError = validateNurse(nurse);
+			String validationError = validateNurse(nurse)
 			if (validationError != null) {
 				return ResponseEntity.badRequest().body(validationError);
 			}
