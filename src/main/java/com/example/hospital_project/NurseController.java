@@ -98,7 +98,7 @@ public class NurseController {
 		return ResponseEntity.ok(nurses);
 	}
 
-	@PostMapping("/login")
+	@PostMapping(value="/login",consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Boolean> login(@RequestBody Nurse nurse) throws IllegalArgumentException, IOException {
 
 		List<Nurse> list = nurseRepository.findAll();
