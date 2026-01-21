@@ -28,7 +28,7 @@ public class NurseController {
 	@Autowired
 	private NurseRepository nurseRepository;
 
-	@PostMapping("/new")
+	@PostMapping(value="/new",consumes = "application/json", produces = "application/json")
 	public ResponseEntity<?> createNurse(@RequestBody Nurse nurse) {
 		try {
 			String validationError = validateNurse(nurse);
