@@ -99,24 +99,26 @@ public class NurseController {
 	}
 
 	@PostMapping(value="/login",consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Boolean> login(@RequestBody Nurse nurse) throws IllegalArgumentException, IOException {
-
+	public ResponseEntity<Nurse> login(@RequestBody Nurse nurse) throws IllegalArgumentException, IOException {
+ 
 		List<Nurse> list = nurseRepository.findAll();
 		ArrayList<Nurse> nurses = new ArrayList<Nurse>(list);
-
+ 
 		boolean loggedin = false;
-
+		Nurse nurseToGiveBack = new Nurse();
+ 
 		for (Nurse nurse2 : nurses) {
 			if (nurse2.getUser().equals(nurse.getUser()) && nurse2.getPw().equals(nurse.getPw())) {
 				loggedin = true;
+				nurseToGiveBack=nurse2;
 				break;
 			}
 		}
-
+ 
 		if (loggedin) {
-			return ResponseEntity.ok(true);
+			return ResponseEntity.ok(nurseToGiveBack);
 		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 		}
 	}
 
